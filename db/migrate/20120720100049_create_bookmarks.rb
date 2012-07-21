@@ -4,7 +4,7 @@ class CreateBookmarks < ActiveRecord::Migration
       t.references    :site
       t.string        :name # For page title
       t.string        :full_url
-      t.string        :shortening
+      t.string        :short_url
       t.timestamps
     end
   end
