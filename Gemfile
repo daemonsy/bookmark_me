@@ -7,7 +7,6 @@ gem 'rails', '3.2.6'
 
 gem 'sqlite3'
 
-
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
@@ -37,3 +36,9 @@ gem 'jquery-rails'
 
 # To use debugger
 # gem 'debugger'
+
+
+gem 'delayed_job_active_record'
+gem 'daemons'
+gem 'bitly', :git=>"git://github.com/daemonsy/bitly"
+gem 'pismo'

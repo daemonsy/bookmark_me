@@ -9,7 +9,9 @@ class Bookmark < ActiveRecord::Base
   # Local host with ports
   # Basically it will be good if I can find a great gem to handle all the different cases in URIs. 
   
-  attr_accessible :full_url
+
+  # Accessors and Accessible
+  attr_accessible :full_url, :tags_attributes, :name, :shortening # FIXME => Remove name and shortening
   attr_accessor :full_hostname_without_www, :full_path
   
   # Associations
@@ -20,34 +22,62 @@ class Bookmark < ActiveRecord::Base
   
   # Callbacks 
   before_save :find_or_create_new_site_for_bookmark
-  
+
+  after_save :callbacks_to_run_if_full_url_changed
   
   # Getters 
-  def full_hostname_without_www  # Declared for completeness
+  def full_hostname_without_www
     self.parse_full_url_to_set_full_hostname_without_www
   end
   
   # Setters
   def full_url=(val)
-    # Have a custom setter for full_url because I beleive basic treatment like downcase(or e.g. handling characters?) can be done here before passing to methods for other higher level treatments.
+    # Have a custom setter for full_url => basic treatment like downcase(or e.g. handling characters?) can be done before passing to methods for other higher level treatments.
     val = val.downcase 
     write_attribute(:full_url,val)
   end
-  
+
+  # Callbacks
   def find_or_create_new_site_for_bookmark
-    # Pass to site class, check if such a site exists using only the host name    
-    site = self.full_hostname_without_www.present? ? Site.find_or_create_by_hostname(self.full_hostname_without_www) : Site.find_or_create_by_hostname(self.full_url) # Does not try to remove www if hostname is not well formed
-    self.site = site
+    # Pass to site class, check if such a site exists using only the host name
+    if self.full_url_changed?    
+      site = self.full_hostname_without_www.present? ? Site.find_or_create_by_hostname(self.full_hostname_without_www) : Site.find_or_create_by_hostname(self.full_url) # Does not try to remove www if hostname is not well formed
+      self.site = site
+    end
   end
   
-  protected
+  def callbacks_to_run_if_full_url_changed
+    if self.full_url_changed?
+      self.set_short_url            # Set URL using Bitly.
+      self.set_bookmark_meta_data   # Crawl page for title
+    end
+  end
   
+  
+  protected
   # Methods used internally only by other methods
+  def set_bookmark_meta_data
+    page = Pismo::Document.new(self.full_url)
+    self.name = page.title
+    self.save
+  end
+  handle_asynchronously :set_bookmark_meta_data
+  
+  def set_short_url
+    begin
+      self.short_url =  BITLY_SVC.shorten(self.full_url).short_url
+    rescue => e
+      self.short_url = "Oops. Error with message => #{e}"
+    ensure 
+      self.save
+    end
+  end
+  handle_asynchronously :set_short_url
+  
   def parse_full_url_to_set_full_hostname_without_www # Sets the URI accessors 
-    # Parse the URI. Defaults to "http" for scheme if it's not present. Otherwise, URI will not be able to handle it.
+    # Parse the URI. Defaults to "http" for scheme if it's not present for URI to handle it. This also sets the full_url with a default "http://" if not present.
     uri = URI.parse(self.full_url)
-    uri = URI.parse("http://#{self.full_url}") if uri.scheme.nil?
-    
+    uri = URI.parse("http://#{self.full_url}") and self.full_url = uri.to_s if uri.scheme.nil?
     if uri.host.present? # Still need to check if uri has a host
       uri.path = ''
       uri.query, uri.fragment = nil # TODO => Check this for safety
