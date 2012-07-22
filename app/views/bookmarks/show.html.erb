@@ -1,27 +1,57 @@
-<%- model_class = @bookmark.class -%>
 <div class="page-header">
   <h1><%= image_tag @bookmark.favicon_url, :class=>"thumbnail favicon-display" %> <%= @bookmark.name %></h1>
 </div>
-<div class="row">
-	<% if notice %>
-		<div class="alert alert-info"><%= notice  %></div>
-	<% end %>
-</div>
+<% if notice %>
+	<div class="row">
+		<div class="span12">
+			<div class="alert alert-info"><%= notice  %></div>
+			<% content_for :head_additions do %>
+					<meta http-equiv="refresh" content="8">
+			<% end %>
+		</div>
+	</div>
+<% end %>
 <div class="row">
 	<div class="span12">
-		<div class="well">
-			<h2>URL:</h2>
-			<h3><%= link_to @bookmark.full_url, @bookmark.full_url %></h3>
-			<h2>Short URL:</h2>
-			<h3><%= link_to @bookmark.short_url, @bookmark.short_url %></h3>
-			<h2>Description:</h2>
-			<p><%= @bookmark.description %></p>
+		<div class="row">
+			<div class="span8">
+				<div class="well">
+					<h2>URL:</h2>
+					<h3><%= link_to @bookmark.full_url.truncate(120) , @bookmark.full_url%></h3>
+					<% if @bookmark.short_url %>
+						<h2>Short URL:</h2>
+						<h3><%= link_to @bookmark.short_url, @bookmark.short_url %></h3>
+					<% end %>
+					<% if @bookmark.description %>
+						<h2>Description:</h2>
+						<p><%= @bookmark.description %></p>
+					<% end %>
+				</div>
+			</div>
+			<div class="span4">
+				<div>
+					<% if @bookmark.site.try(:name) %>
+						<h2>Site Name</h2>
+						<p><%= link_to @bookmark.site.name, site_path(@bookmark.site) %></p>
+					<% end %>
+					<% if @bookmark.tags.present? %>
+						<h2>Tags for Bookmark</h2>
+						<p>
+							<ul class="tag-list">
+								<% @bookmark.tag_list.each do |tag| %>
+									<li><%= link_to tag, tags_path(:name=>tag) %></li>
+								<% end %>
+							</ul>
+						</p>
+					<% end %>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
 <div class="row">
 	<div class="span12">
-		<h2> Other Bookmarks from the same site</h2>
+		<h2> Bookmarks from Parent Site - <%= @bookmark.site.name %></h2>
 		<table class="table table-striped">
 			<tr>
 				<th>&nbsp;</th>

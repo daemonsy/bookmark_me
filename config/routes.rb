@@ -12,7 +12,13 @@ Bookmarkme::Application.routes.draw do
     end
   end
   
-  resources :tags, :defaults=>{:format=>:json} do
+  resources :sites do
+    collection do
+      post :search
+    end
+  end
+  
+  resources :tags do
     collection do
       get :search 
     end

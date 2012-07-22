@@ -2,15 +2,27 @@ class BookmarksController < ApplicationController
   before_filter :assign_tag_tokens_params_if_present
   
   def assign_tag_tokens_params_if_present
-    # TODO This assignment is because the JS plug did not handle submission elegantly. The plugin did not have to rename the target textfield, but it did.
+    # TODO This assignment is because the JS plug does not handle submission elegantly. The plugin did not have to rename the target textfield, but it did.
     # In order not to edit the plugin's code, this is currently a fix by direct assignment.
     params[:bookmark][:tag_tokens] = params[:tag_tokens] if params[:tag_tokens].present?
+  end
+  
+  # POST /bookmarks/search
+  def search
+    # Will look through information in Site model, but does not separate the results into sites / bookmarks. 
+    # The user model envisioned is interaction with bookmarks.  
+    @search = Bookmark.search(params[:q])
+    @bookmarks = @search.results.paginate(:page=>params[:page])
+    respond_to do |format|
+      format.html {render :action => :index}
+      format.json {render json: @bookmarks}
+    end
   end
   
   # GET /bookmarks
   # GET /bookmarks.json
   def index
-    @bookmarks = Bookmark.all
+    @bookmarks = Bookmark.paginate(:page=> params[:page], :per_page=>20)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -56,7 +68,7 @@ class BookmarksController < ApplicationController
 
     respond_to do |format|
       if @bookmark.save
-        format.html { redirect_to @bookmark, notice: 'Bookmark was successfully created.', :meta_refresh=>1 }
+        format.html { redirect_to @bookmark, notice: 'Crawling Bookmark URL. Page will refresh in 5 seconds.'}
         format.json { render json: @bookmark, status: :created, location: @bookmark }
       else
         format.html { render action: "new" }

@@ -1,0 +1,11 @@
+<div class="row">
+	<div class="span12">
+		<div class="well">
+			<h2>Search</h2>
+			<%= form_for("",:url=>search_sites_path, :html=>{:class=>"form-search"}) do |f| %>
+				<%= f.text_field :q, :placeholder=> "Search Sites...", :class=>"search-query input-large" %>
+				<%= f.submit "Search", :class=>"btn btn-success" %>
+			<% end %>
+		</div>
+	</div>
+</div>

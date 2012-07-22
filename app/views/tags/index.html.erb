@@ -1,0 +1,15 @@
+<h1> Tag - <%= @tag.name %></h1>
+<table class="table table-striped">
+	<tr>
+		<th>Name</th>
+		<th>Full URL</th>
+		<th>Short URL</th>
+	</tr>
+	<% @bookmarks.each do |bookmark| %>
+		<tr>
+			<td><%= bookmark.name %></td>
+			<td><%= bookmark.full_url.truncate(100) %> [<%= link_to "visit", bookmark.full_url  %>]</td>
+			<td><%= link_to bookmark.short_url, bookmark.short_url %></td>
+		</tr>
+	<% end %>
+</table>

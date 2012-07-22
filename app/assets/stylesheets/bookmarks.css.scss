@@ -15,6 +15,20 @@
 	}
 
 }
+.tag-list {
+		list-style:none;
+		padding-left:0;
+		margin-left:0px;
+		li {
+			display:inline;
+		}
+		li:after {
+			content: ",";
+		};
+		li:last-child:after {
+			content: none;
+		};
+}
 
 .favicon-display {
 
@@ -24,10 +38,6 @@
 		max-width:16px;	
 }
 
-.css1 { font-size: 1.0em; }
-.css2 { font-size: 1.2em; }
-.css3 { font-size: 1.4em; }
-.css4 { font-size: 1.6em; }
 
 .text-right {
 	text-align:right;

@@ -1,31 +1,18 @@
 class Bookmark < ActiveRecord::Base
   ##
-  # Not going to validate the URL is well formed. Following my user modeling, I feel that at minimum a bookmark entry should always be saved. The bookmark app can be used as a blind text store by users.
-  # Scheme, Host and port
+  # Not going to validate the URL is well formed. Following some user modeling, I feel that at minimum a bookmark entry should always be saved.
+  # User should never lose data after pressing save as much as possible.
   
-  # Test Strings
+  # URL Cases
   # "http://localhost:3000/api/v1/users.json?q=12345&b=12345&time=20070301"
   # Chinese character URIs 
   # IP Addresses 
   # Local host with ports
-  # Basically it will be good if I can find a great gem to handle all the different cases in URIs. 
-  acts_as_taggable
-  # includes "Search"
-  # def self.make_me_searchable(options = {})
-  #   @fields = options[:fields]
-  # end
-  
-  # def self.search(query)
-  #   search = Search.new(@fields)
 
-  #   @fields.each do |field|
-  #     search_results += self.where("#{field} LIKE ?", "%#{query}%")
-  #   end
-  #   search.results = search_results
-  #   search
-  # end
+  acts_as_taggable
+  ActsAsTaggableOn.remove_unused_tags = true
   
-  make_me_searchable :fields => :name
+  make_me_searchable :fields => [:name,:description, :full_url]
   
 
   # Accessors and Accessible

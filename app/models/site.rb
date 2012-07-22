@@ -1,7 +1,8 @@
 class Site < ActiveRecord::Base
-  # attr_accessible :title, :body
-  # has a hostname, will treat www and without www as the same site.
-
+  
+  make_me_searchable :fields => [:name, :description, :hostname]
+  
+  
   # Associations
   has_many :bookmarks, :dependent => :destroy
   

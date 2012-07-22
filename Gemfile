@@ -45,7 +45,10 @@ gem 'pismo'
 
 # Tagging
 gem 'acts-as-taggable-on', '~> 2.3.1'
-gem 'chosen-rails'
+
 
 # My attempt at search
 gem 'sqsearch', :path =>"/Users/daemonsy/Dropbox/Code/sqsearch"
+
+# Pagination
+gem 'will_paginate'

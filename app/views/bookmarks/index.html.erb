@@ -1,15 +1,25 @@
 <div class="page-header">
   <h1>Your Bookmarks</h1>
 </div>
+
+	<%= render :partial =>"search" %>
+
+<div class="row">
+	<div class="span11 offset1">
+		<div class="digg_pagination">
+			<%= will_paginate @bookmarks %>
+		</div>
+	</div>
+</div>
 <% @bookmarks.each do |bookmark| %>
 	<div class="row">
 		<div class="span1 text-right">
-		<%= bookmark.favicon_url.present? ? image_tag(bookmark.favicon_url, :class=>"thumbnail favicon-display") : image_tag("http://www.placehold.it/16x16") %></div>
+		<%= bookmark.favicon_url.present? ? image_tag(bookmark.favicon_url, :class=>"thumbnail favicon-display") : image_tag("http://www.placehold.it/16x16", :class=>"thumbnail favicon-display") %></div>
 		<div class="span9">
 			<h3> <%= bookmark.name %> </h3>
 			<div class="row">
 				<div class="span9">
-					<p><%= link_to bookmark.full_url, bookmark.full_url %> </p>
+					<p><%= link_to bookmark.full_url.truncate(100), bookmark.full_url %> </p>
 					<% if bookmark.description.present? %>
 						<div class="well">
 							<h4>Description</h4>
@@ -34,10 +44,11 @@
 			<div class="row">
 				<div class="span2">
 					<h5>Tags</h5>
-					<% tag_cloud(bookmark.tags, %w(css1 css2 css3 css4)) do |tag, css_class| %>
-					  <%#= link_to tag.name, { :action => :tag, :id => tag.name }, :class => css_class %>
-						<span class="<%= css_class %>"><%= tag.name %></span>
-					<% end %>
+					<ul class="tag-list">
+						<% bookmark.tag_list.each do |tag| %>
+							<li><%= link_to tag, tags_path(:name=>tag) %></li>
+						<% end %>
+					</ul>
 				</div>
 			</div>
 			
@@ -46,7 +57,21 @@
 	<hr/>
 	
 <% end %>
+<% if @bookmarks.nil? || @bookmarks.empty? %>
+	<div class="row">
+		<div class="span12">
+			<p class="well">No bookmarks found.</p>
+		</div>
+	</div>
+<% end %>
 
+<div class="row">
+	<div class="span11 offset1">
+		<div class="digg_pagination">
+			<%= will_paginate @bookmarks %>
+		</div>
+	</div>
+</div>
 
 
 <%= link_to t('.new', :default => t("helpers.links.new")),
