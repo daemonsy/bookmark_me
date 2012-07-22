@@ -1,25 +1,30 @@
-<%- model_class = Bookmark.new.class -%>
 <div class="page-header">
   <h1>Your Bookmarks</h1>
 </div>
 <% @bookmarks.each do |bookmark| %>
 	<div class="row">
-		<div class="span1"><%= image_tag bookmark.favicon_url, :class=>"thumbnail favicon-display" %></div>
+		<div class="span1 text-right">
+		<%= bookmark.favicon_url.present? ? image_tag(bookmark.favicon_url, :class=>"thumbnail favicon-display") : image_tag("http://www.placehold.it/16x16") %></div>
 		<div class="span9">
-			<h3> <%= bookmark.name %></h3>
+			<h3> <%= bookmark.name %> </h3>
 			<div class="row">
 				<div class="span9">
-					<p><%= link_to bookmark.full_url, bookmark.full_url %></p>
+					<p><%= link_to bookmark.full_url, bookmark.full_url %> </p>
 					<% if bookmark.description.present? %>
 						<div class="well">
 							<h4>Description</h4>
-							<p><%= bookmark.description %></p>
+							<p><%= bookmark.description.truncate(350) %></p>
 						</div>
 					<% end %>
 				</div>
 			</div>
 		</div>
 		<div class="span2">
+			<div class="row">
+				<div class="span2">
+					<%= link_to "View Details", bookmark_path(bookmark), :class=>"btn btn-info" %>
+				</div>
+			</div>
 			<div class="row">
 				<div class="span2">
 				<h5>Short URL:</h5>

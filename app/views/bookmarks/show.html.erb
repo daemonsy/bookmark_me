@@ -1,18 +1,47 @@
 <%- model_class = @bookmark.class -%>
 <div class="page-header">
-  <h1><%=t '.title', :default => model_class.model_name.human %></h1>
+  <h1><%= image_tag @bookmark.favicon_url, :class=>"thumbnail favicon-display" %> <%= @bookmark.name %></h1>
 </div>
-
-<dl class="dl-horizontal">
-  <dt><strong><%= model_class.human_attribute_name(:site_id) %>:</strong></dt>
-  <dd><%= @bookmark.site_id %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:name) %>:</strong></dt>
-  <dd><%= @bookmark.name %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:full_url) %>:</strong></dt>
-  <dd><%= @bookmark.full_url %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:short_url) %>:</strong></dt>
-  <dd><%= @bookmark.short_url %></dd>
-</dl>
+<div class="row">
+	<% if notice %>
+		<div class="alert alert-info"><%= notice  %></div>
+	<% end %>
+</div>
+<div class="row">
+	<div class="span12">
+		<div class="well">
+			<h2>URL:</h2>
+			<h3><%= link_to @bookmark.full_url, @bookmark.full_url %></h3>
+			<h2>Short URL:</h2>
+			<h3><%= link_to @bookmark.short_url, @bookmark.short_url %></h3>
+			<h2>Description:</h2>
+			<p><%= @bookmark.description %></p>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="span12">
+		<h2> Other Bookmarks from the same site</h2>
+		<table class="table table-striped">
+			<tr>
+				<th>&nbsp;</th>
+				<th>Name</th>
+				<th>Description</th>
+				<th>URL</th>
+				<th>Short URL</th>
+			</tr>
+			<% @site_bookmarks.each do |bookmark| %>
+				<tr>
+					<td><%= image_tag bookmark.favicon_url, :class=>"favicon-display" %></td>
+					<td><h3><%= link_to bookmark.name && bookmark.name.truncate(80), bookmark_path(bookmark) %></h3></td>
+					<td><%= bookmark.description && bookmark.description.truncate(120) %></td>
+					<td><%= link_to bookmark.full_url.truncate(80), bookmark.full_url %></td>
+					<td><%= link_to bookmark.short_url && bookmark.short_url.truncate(80), bookmark.short_url %></td>
+				</tr>
+			<% end %>
+		</table>
+	</div>
+</div>
 
 <div class="form-actions">
   <%= link_to t('.back', :default => t("helpers.links.back")),
