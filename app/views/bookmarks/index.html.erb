@@ -14,7 +14,7 @@
 <% @bookmarks.each do |bookmark| %>
 	<div class="row">
 		<div class="span1 text-right">
-		<%= bookmark.favicon_url.present? ? image_tag(bookmark.favicon_url, :class=>"thumbnail favicon-display") : image_tag("http://www.placehold.it/16x16", :class=>"thumbnail favicon-display") %></div>
+		<%= image_tag(bookmark.favicon_url.present? ? bookmark.favicon_url : "http://www.placehold.it/16x16", :class=>"thumbnail favicon-display") %></div>
 		<div class="span9">
 			<h3> <%= bookmark.name %> </h3>
 			<div class="row">
