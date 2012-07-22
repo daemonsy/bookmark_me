@@ -6,10 +6,15 @@ Bookmarkme::Application.routes.draw do
   #   match 'products/:id' => 'catalog#view'
   # Keep in mind you can assign values other than :controller and :action
   root :to => "bookmarks#new"
-  resources :bookmarks
+  resources :bookmarks do
+    collection do
+      post :search
+    end
+  end
+  
   resources :tags, :defaults=>{:format=>:json} do
     collection do
-      get :search, 
+      get :search 
     end
   end
   
