@@ -1,17 +1,5 @@
 <div id="bookmark-form">
 	<%= form_for @bookmark, :html => { :class => 'form-horizontal' } do |f| %>
-	  <!-- <div class="control-group">
-	    <%= f.label :site_id, :class => 'control-label' %>
-	    <div class="controls">
-	      <%= f.number_field :site_id, :class => 'number_field' %>
-	    </div>
-	  </div> -->
-	  <!-- <div class="control-group">
-	    <%= f.label :name, :class => 'control-label' %>
-	    <div class="controls">
-	      <%= f.text_field :name, :class => 'text_field' %>
-	    </div>
-	  </div> -->
 		<div class="row">
 			<div class="span12">
 				<%= f.label "Paste URL Here" %>
@@ -28,6 +16,17 @@
 				</div>
 			</div>
 		</div>
+		<% if @bookmark.errors.any? %>
+			<div class="row">
+				<div class="span6 offset3">
+					<div class="well errors">
+						<% @bookmark.errors.full_messages.each do |msg| %>
+							<p><%= msg %></p>
+						<% end %>
+					</div>
+				</div>
+			</div>
+		<% end %>
 		<div class="row form-controls">
 			<div class="span4 offset4">		
 				<%= f.submit "Bookmark me!", :class => 'btn btn-primary btn-large' %>

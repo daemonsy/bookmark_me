@@ -13,6 +13,11 @@
 	.form-controls {
 		margin-top:20px;
 	}
+	.errors {
+		background: #CB4040;
+		color:#FFF;
+		margin: 20px auto;
+	}
 
 }
 .tag-list {
@@ -41,4 +46,8 @@
 
 .text-right {
 	text-align:right;
+}
+
+.front-page {
+	text-align:center;
 }
