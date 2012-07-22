@@ -18,47 +18,49 @@ class Bookmark < ActiveRecord::Base
 
   # Accessors and Accessible
   attr_accessible :full_url,:tag_tokens
-  attr_accessor :full_hostname_without_www
+  attr_accessor :full_hostname
   attr_reader :tag_tokens
   
   # Associations
   belongs_to :site
-  # has_and_belongs_to_many :tags
+  
   
   
   # Validations
-  validates_presence_of :full_url
+  validates_presence_of :full_url, :message=> "is required for bookmarking."
+  validates_associated :site
   
   # Callbacks 
-  before_save :find_or_create_new_site_for_bookmark, :if => :full_url_changed?
+  before_save :find_or_create_new_site_for_bookmark
   
   # Callbacks are triggered infinitely if the process is not in delayed_job. Seek for a better solution
   # I tried using if on the dirty tracking, but it seems its always called.
-  after_save :callbacks_to_run_if_full_url_changed, :if => :full_url_changed?
+  after_save :callbacks_to_run_if_full_url_changed
   
     
   # Getters and Setters
-  def full_hostname_without_www
-    read_attribute(:full_host_name_without_www) || self.parse_full_url_to_set_full_hostname_without_www
+  def full_hostname
+    read_attribute(:full_hostname) || self.parse_full_url_to_set_full_hostname_only
   end
-  
-  
-  
-
-  
   
   def tag_tokens=(tags)
     # Tag tokens is a method for the JS script to pass in a comma delimited string of tag names
     if tags.present?
+      self.tag_list = []
       self.tag_list << tags.split(",").reject{|t|t.empty?}
     end
   end
 
   # Callbacks
   def find_or_create_new_site_for_bookmark
-    # Pass to site class, check if such a site exists using only the host name
-    if self.full_url_changed?   
-      site = self.full_hostname_without_www.present? ? Site.find_or_create_by_hostname(self.full_hostname_without_www) : Site.find_or_create_by_hostname(self.full_url) # Does not try to remove www if hostname is not well formed
+    # UPDATE The search for the site will go by full url. If not found, it will look to see if there's one without www.
+    # Creation is only done if both the above are not available. It is a bit unreasonable for me to assume all urls should be stored in the non-www form. 
+    # Sometimes they might be different sites (usually the non-www version returns an error for SG government services). 
+
+    # The thing is, usually users will not bookmark a bad URL unless they are typing by hand. The next iteration should instead focus on whether the URL returns a 404 or redirect instead
+    # of making assumptions
+    if self.full_url_changed? 
+      site = Site.find_or_create_by_hostname(self.full_hostname)
       self.site = site
     end
   end
@@ -98,7 +100,7 @@ class Bookmark < ActiveRecord::Base
   end
   handle_asynchronously :set_short_url
   
-  def parse_full_url_to_set_full_hostname_without_www # Sets the URI accessors 
+  def parse_full_url_to_set_full_hostname_only # Sets the URI accessors 
     # Parse the URI. Defaults to "http" for scheme if it's not present for URI to handle it. This also sets the full_url with a default "http://" if not present.
     begin
       uri = URI.parse(self.full_url)
@@ -107,7 +109,7 @@ class Bookmark < ActiveRecord::Base
         uri.path = ''
         uri.query, uri.fragment = nil # TODO => Check this for safety
       end
-      self.full_hostname_without_www = uri.to_s
+      self.full_hostname = uri.to_s
     rescue
       nil
     end

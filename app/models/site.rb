@@ -8,6 +8,8 @@ class Site < ActiveRecord::Base
   
   after_create :set_site_meta_data
   
+  # DO NOT validates_associated :bookmark.
+  
   protected
   def set_site_meta_data
     begin

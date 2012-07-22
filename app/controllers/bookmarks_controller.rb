@@ -81,7 +81,7 @@ class BookmarksController < ApplicationController
   # PUT /bookmarks/1.json
   def update
     @bookmark = Bookmark.find(params[:id])
-    @bookmark.tag_tokens = params[:tag_tokens] # Same as above comment
+
 
     respond_to do |format|
       if @bookmark.update_attributes(params[:bookmark])
