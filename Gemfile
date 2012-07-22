@@ -52,3 +52,6 @@ gem 'sqsearch', :git =>"git://github.com/daemonsy/sqsearch"
 
 # Pagination
 gem 'will_paginate'
+
+# YAML DB
+gem 'yaml_db' # General purpose data dumper / loader. Convenient.
