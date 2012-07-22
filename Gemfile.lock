@@ -7,6 +7,12 @@ GIT
       httparty (>= 0.7.6)
       oauth2 (~> 0.5.0)
 
+PATH
+  remote: /Users/daemonsy/Dropbox/Code/sqsearch
+  specs:
+    sqsearch (0.0.1)
+      rails (~> 3.2.6)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -178,5 +184,6 @@ DEPENDENCIES
   rails (= 3.2.6)
   sass-rails (~> 3.2.3)
   sqlite3
+  sqsearch!
   twitter-bootstrap-rails
   uglifier (>= 1.0.3)
