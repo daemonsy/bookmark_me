@@ -58,5 +58,11 @@ module Bookmarkme
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
+    
+    config.after_initialize do
+      Bitly.use_api_version_3
+      ::BITLY_SVC = Bitly.new("o_6ijourg7rs", "R_4cfcc62e1d6df9a7a37fc74797458c92")
+    end
+    
   end
 end

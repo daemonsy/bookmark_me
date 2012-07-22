@@ -4,10 +4,6 @@ class Site < ActiveRecord::Base
   
   # Associations
   has_many :bookmarks, :dependent => :destroy
-  
-  #def self.find_or_create_by_hostname_after_removing_www(hostname)
-  #  # Remove www. if present
-  #  self.find_or_create_by_hostname(hostname.sub(/www\./,''))
-  #end
+
   
 end

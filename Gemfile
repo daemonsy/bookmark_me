@@ -37,8 +37,12 @@ gem 'jquery-rails'
 # To use debugger
 # gem 'debugger'
 
-
+# Shortening and getting page data using Delayed Job
 gem 'delayed_job_active_record'
 gem 'daemons'
 gem 'bitly', :git=>"git://github.com/daemonsy/bitly"
 gem 'pismo'
+
+# Tagging
+gem 'acts-as-taggable-on', '~> 2.3.1'
+gem 'chosen-rails'

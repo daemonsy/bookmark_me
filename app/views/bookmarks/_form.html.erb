@@ -1,0 +1,35 @@
+<%= form_for @bookmark, :html => { :class => 'form-horizontal' } do |f| %>
+  <!-- <div class="control-group">
+    <%= f.label :site_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.number_field :site_id, :class => 'number_field' %>
+    </div>
+  </div> -->
+  <!-- <div class="control-group">
+    <%= f.label :name, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :name, :class => 'text_field' %>
+    </div>
+  </div> -->
+	<div class="row">
+		<div class="span12">
+			<%= f.label "Paste URL Here" %>
+			<%= f.text_field :full_url, :class=>"span6", :id=>"full-url" %>
+		</div>
+	</div>
+	<div class="row">
+		<div class="span12">
+			<%= f.label "Tag it!" %>
+			<div class="row">
+				<div class="span4 offset4">
+					<%= f.text_field :tag_tokens, :data=> {load: @bookmark.tags.to_json }%>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row form-controls">
+		<div class="span4 offset4">		
+			<%= f.submit "Bookmark me!", :class => 'btn btn-primary btn-large' %>
+		</div>
+	</div>
+<% end %>

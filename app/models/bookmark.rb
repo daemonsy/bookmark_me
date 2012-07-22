@@ -1,4 +1,5 @@
 class Bookmark < ActiveRecord::Base
+  ##
   # Not going to validate the URL is well formed. Following my user modeling, I feel that at minimum a bookmark entry should always be saved. The bookmark app can be used as a blind text store by users.
   # Scheme, Host and port
   
@@ -8,33 +9,44 @@ class Bookmark < ActiveRecord::Base
   # IP Addresses 
   # Local host with ports
   # Basically it will be good if I can find a great gem to handle all the different cases in URIs. 
+  acts_as_taggable
   
 
   # Accessors and Accessible
-  attr_accessible :full_url, :tags_attributes, :name, :shortening # FIXME => Remove name and shortening
+  attr_accessible :full_url,:tag_tokens
   attr_accessor :full_hostname_without_www, :full_path
+  attr_reader :tag_tokens
   
   # Associations
   belongs_to :site
-  has_and_belongs_to_many :tags
+  # has_and_belongs_to_many :tags
   
   accepts_nested_attributes_for :tags, :allow_destroy => true, :reject_if => proc { |obj| obj.blank? }
+  
+  # Validations
+  validates_presence_of :full_url
   
   # Callbacks 
   before_save :find_or_create_new_site_for_bookmark
 
   after_save :callbacks_to_run_if_full_url_changed
   
-  # Getters 
+  # Getters and Setters
   def full_hostname_without_www
     self.parse_full_url_to_set_full_hostname_without_www
   end
   
-  # Setters
   def full_url=(val)
     # Have a custom setter for full_url => basic treatment like downcase(or e.g. handling characters?) can be done before passing to methods for other higher level treatments.
     val = val.downcase 
     write_attribute(:full_url,val)
+  end
+  
+  
+  def tag_tokens=(tags)
+    if tags.present?
+      self.tag_list << tags.split(",").reject{|t|t.empty?}
+    end
   end
 
   # Callbacks
