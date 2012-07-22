@@ -19,7 +19,7 @@
 	</tr>
 	<% @site.bookmarks.each do |bookmark| %>
 		<tr>
-			<td><%= link_to bookmark.name, bookmark_path(bookmark) %></td>
+			<td><%= link_to(bookmark.name.present? ? bookmark.name : bookmark.full_url, bookmark_path(bookmark)) %></td>
 			<td><%= bookmark.description %></td>
 			<td><%= link_to bookmark.full_url.truncate(80), bookmark.full_url %></td>
 			<td><%= bookmark.tag_list %></td>
