@@ -11,15 +11,17 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120721181801) do
+ActiveRecord::Schema.define(:version => 20120722024656) do
 
   create_table "bookmarks", :force => true do |t|
     t.integer  "site_id"
     t.string   "name"
     t.string   "full_url"
     t.string   "short_url"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.string   "favicon_url"
+    t.text     "description"
   end
 
   create_table "delayed_jobs", :force => true do |t|

@@ -70,7 +70,9 @@ class Bookmark < ActiveRecord::Base
   # Methods used internally only by other methods
   def set_bookmark_meta_data
     page = Pismo::Document.new(self.full_url)
-    self.name = page.title
+    self.name = page.html_title
+    self.favicon_url = page.favicon
+    self.description = page.description
     self.save
   end
   handle_asynchronously :set_bookmark_meta_data
