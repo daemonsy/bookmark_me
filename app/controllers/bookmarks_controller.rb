@@ -21,7 +21,8 @@ class BookmarksController < ApplicationController
   # GET /bookmarks/1
   # GET /bookmarks/1.json
   def show
-    @bookmark = Bookmark.find(params[:id])
+    @bookmark = Bookmark.find(params[:id], :include=>{:site=>:bookmarks})
+    @site_bookmarks = @bookmark.site.bookmarks - [@bookmark] # @bookmark.site.bookmarks should always return you an empty array and not nil
 
     respond_to do |format|
       format.html # show.html.erb
@@ -55,7 +56,7 @@ class BookmarksController < ApplicationController
 
     respond_to do |format|
       if @bookmark.save
-        format.html { redirect_to @bookmark, notice: 'Bookmark was successfully created.' }
+        format.html { redirect_to @bookmark, notice: 'Bookmark was successfully created.', :meta_refresh=>1 }
         format.json { render json: @bookmark, status: :created, location: @bookmark }
       else
         format.html { render action: "new" }
