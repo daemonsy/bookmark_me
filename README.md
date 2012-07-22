@@ -49,6 +49,7 @@ The plugin above queries the tag controller for a json list of available tags wh
 
 Known Problems
 ==============
+* The callback pattern in my Bookmark model causes a loop if the job is not handled async by delayed_job due to callbacks running again.
 * Have not handled redirect with PISMO yet. Tricky because e.g. www.gmail.com leads you to multiple redirects. 
 * Some URLs have unique hashes, the moment it's bookmarked it's invalid already. 
 
