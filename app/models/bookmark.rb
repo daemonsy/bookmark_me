@@ -12,19 +12,19 @@ class Bookmark < ActiveRecord::Base
   acts_as_taggable
   ActsAsTaggableOn.remove_unused_tags = true
   
+  # Comes from a gem wrote for this exercise. Very fragile.
   make_me_searchable :fields => [:name,:description, :full_url]
   
 
   # Accessors and Accessible
   attr_accessible :full_url,:tag_tokens
-  attr_accessor :full_hostname_without_www, :full_path
+  attr_accessor :full_hostname_without_www
   attr_reader :tag_tokens
   
   # Associations
   belongs_to :site
   # has_and_belongs_to_many :tags
   
-  accepts_nested_attributes_for :tags, :allow_destroy => true, :reject_if => proc { |obj| obj.blank? }
   
   # Validations
   validates_presence_of :full_url
@@ -44,14 +44,11 @@ class Bookmark < ActiveRecord::Base
   
   
   
-  def full_url=(val)
-    # Have a custom setter for full_url => basic treatment like downcase(or e.g. handling characters?) can be done before passing to methods for other higher level treatments.
-    val = val.downcase
-    write_attribute(:full_url,val)
-  end
+
   
   
   def tag_tokens=(tags)
+    # Tag tokens is a method for the JS script to pass in a comma delimited string of tag names
     if tags.present?
       self.tag_list << tags.split(",").reject{|t|t.empty?}
     end
@@ -60,8 +57,7 @@ class Bookmark < ActiveRecord::Base
   # Callbacks
   def find_or_create_new_site_for_bookmark
     # Pass to site class, check if such a site exists using only the host name
-    if self.full_url_changed?
-      puts "in full url changed trying to save"    
+    if self.full_url_changed?   
       site = self.full_hostname_without_www.present? ? Site.find_or_create_by_hostname(self.full_hostname_without_www) : Site.find_or_create_by_hostname(self.full_url) # Does not try to remove www if hostname is not well formed
       self.site = site
     end
@@ -95,7 +91,7 @@ class Bookmark < ActiveRecord::Base
     begin
       self.short_url =  BITLY_SVC.shorten(self.full_url).short_url
     rescue => e
-      self.short_url = "Oops. Error with message => #{e}"
+      self.short_url = "Error with message => #{e}"
     ensure 
       self.save
     end
