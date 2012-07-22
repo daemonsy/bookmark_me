@@ -7,8 +7,9 @@ GIT
       httparty (>= 0.7.6)
       oauth2 (~> 0.5.0)
 
-PATH
-  remote: /Users/daemonsy/Dropbox/Code/sqsearch
+GIT
+  remote: git://github.com/daemonsy/sqsearch
+  revision: c614c3291107f282b054421123c89be8966a44e3
   specs:
     sqsearch (0.0.1)
       rails (~> 3.2.6)

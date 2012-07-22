@@ -47,8 +47,8 @@ gem 'pismo'
 gem 'acts-as-taggable-on', '~> 2.3.1'
 
 
-# My attempt at search
-gem 'sqsearch', :path =>"/Users/daemonsy/Dropbox/Code/sqsearch"
+# My fragile attempt at search
+gem 'sqsearch', :git =>"git://github.com/daemonsy/sqsearch"
 
 # Pagination
 gem 'will_paginate'
