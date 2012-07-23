@@ -38,7 +38,7 @@ Gem Usage
 * acts-as-taggable-on => Simple tagging
 * will_paginate
 * twitter-bootstrap-rails
-* sqsearch => a very mini SQL like search plugin written for the exercise
+* [sqsearch](https://github.com/daemonsy/sqsearch) => a very mini SQL like search plugin written for the exercise
 
 Javascript
 --------------------------------------------------------------------------

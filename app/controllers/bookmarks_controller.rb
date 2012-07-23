@@ -4,7 +4,7 @@ class BookmarksController < ApplicationController
   def assign_tag_tokens_params_if_present
     # TODO This assignment is because the JS plug does not handle submission elegantly. The plugin did not have to rename the target textfield, but it did.
     # In order not to edit the plugin's code, this is currently a fix by direct assignment.
-    params[:bookmark][:tag_tokens] = params[:tag_tokens] if params[:tag_tokens].present?
+    params[:bookmark][:tag_tokens] = params[:as_values_tag_tokens] if params[:as_values_tag_tokens].present?
   end
   
   # POST /bookmarks/search

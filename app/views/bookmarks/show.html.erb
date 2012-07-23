@@ -51,7 +51,8 @@
 </div>
 <div class="row">
 	<div class="span12">
-		<h2> Bookmarks from Parent Site - <%= @bookmark.site.name %></h2>
+		<h2> <%= "#{@bookmark.site.try(:name) } (#{@bookmark.site.hostname})"  %></h2>
+		<h3> Other Bookmarks from Site</h3>
 		<table class="table table-striped">
 			<tr>
 				<th>&nbsp;</th>
