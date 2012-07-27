@@ -1,5 +1,5 @@
 <div class="page-header">
-  <h1><%= image_tag(@bookmark.favicon_url.present? ? @bookmark.favicon_url : "http://www.placehold.it/16x16", :class=>"thumbnail favicon-display") %> <%= @bookmark.name %></h1>
+  <h1><%= @bookmark.favicon_url.present? ? image_tag(@bookmark.favicon_url, :class=>"thumbnail favicon-display") : nil %> <%= @bookmark.name %></h1>
 </div>
 <% if notice %>
 	<div class="row">
