@@ -5,6 +5,7 @@ class Site < ActiveRecord::Base
   
   # Associations
   has_many :bookmarks, :dependent => :destroy
+  validates_presence_of :hostname
   
   after_create :set_site_meta_data
   
