@@ -28,7 +28,7 @@ class BookmarksController < ApplicationController
   end
 
   def show
-    @bookmark = Bookmark.find(params[:id], :include=>{:site=>:bookmarks})
+    @bookmark = Bookmark.includes(site: :bookmarks).find(params[:id])
     @site_bookmarks = @bookmark.site.bookmarks - [@bookmark] # @bookmark.site.bookmarks should always return you an empty array and not nil
 
     respond_to do |format|
@@ -51,7 +51,7 @@ class BookmarksController < ApplicationController
   end
 
   def create
-    @bookmark = Bookmark.find_or_initialize_by_full_url(bookmark_params[:full_url])
+    @bookmark = Bookmark.find_or_initialize_by(full_url: bookmark_params[:full_url])
     @bookmark.attributes= params[:bookmark]
 
     respond_to do |format|
