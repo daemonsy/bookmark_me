@@ -1,0 +1,15 @@
+development:
+  adapter: postgresql
+  encoding: utf-8
+  min_messages: warning
+  timeout: 5000
+  username: <%= `whoami`.chomp %>
+  database: bookmark_dev
+
+test:
+  adapter: postgresql
+  encoding: utf-8
+  min_messages: warning
+  timeout: 5000
+  username: <%= `whoami`.chomp %>
+  database: bookmark_test
