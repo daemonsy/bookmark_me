@@ -1,16 +1,15 @@
 class BookmarksController < ApplicationController
   before_filter :assign_tag_tokens_params_if_present
-  
+
   def assign_tag_tokens_params_if_present
-    # TODO This assignment is because the JS plug does not handle submission elegantly. The plugin did not have to rename the target textfield, but it did.
+    # TODO This assignment is because the JS plugin does not handle submission elegantly. The plugin did not have to rename the target textfield, but it did.
     # In order not to edit the plugin's code, this is currently a fix by direct assignment.
     params[:bookmark][:tag_tokens] = params[:as_values_tag_tokens] if params[:as_values_tag_tokens].present?
   end
-  
-  # POST /bookmarks/search
+
   def search
-    # Will look through information in Site model, but does not separate the results into sites / bookmarks. 
-    # The user model envisioned is interaction with bookmarks.  
+    # Will look through information in Site model, but does not separate the results into sites / bookmarks.
+    # The user model envisioned is interaction with bookmarks.
     @search = Bookmark.search(params[:q])
     @bookmarks = @search.results.paginate(:page=>params[:page])
     respond_to do |format|
@@ -18,9 +17,7 @@ class BookmarksController < ApplicationController
       format.json {render json: @bookmarks}
     end
   end
-  
-  # GET /bookmarks
-  # GET /bookmarks.json
+
   def index
     @bookmarks = Bookmark.paginate(:page=> params[:page], :per_page=>20)
 
@@ -30,8 +27,6 @@ class BookmarksController < ApplicationController
     end
   end
 
-  # GET /bookmarks/1
-  # GET /bookmarks/1.json
   def show
     @bookmark = Bookmark.find(params[:id], :include=>{:site=>:bookmarks})
     @site_bookmarks = @bookmark.site.bookmarks - [@bookmark] # @bookmark.site.bookmarks should always return you an empty array and not nil
@@ -42,8 +37,6 @@ class BookmarksController < ApplicationController
     end
   end
 
-  # GET /bookmarks/new
-  # GET /bookmarks/new.json
   def new
     @bookmark = Bookmark.new
 
@@ -53,18 +46,13 @@ class BookmarksController < ApplicationController
     end
   end
 
-  # GET /bookmarks/1/edit
   def edit
     @bookmark = Bookmark.find(params[:id])
   end
 
-  # POST /bookmarks
-  # POST /bookmarks.json
   def create
-    @bookmark = Bookmark.find_or_initialize_by_full_url(params[:bookmark][:full_url])
-    # @bookmark = Bookmark.new(params[:bookmark])
+    @bookmark = Bookmark.find_or_initialize_by_full_url(bookmark_params[:full_url])
     @bookmark.attributes= params[:bookmark]
-
 
     respond_to do |format|
       if @bookmark.save
@@ -77,14 +65,11 @@ class BookmarksController < ApplicationController
     end
   end
 
-  # PUT /bookmarks/1
-  # PUT /bookmarks/1.json
   def update
     @bookmark = Bookmark.find(params[:id])
 
-
     respond_to do |format|
-      if @bookmark.update_attributes(params[:bookmark])
+      if @bookmark.update_attributes(bookmark_params)
         format.html { redirect_to @bookmark, notice: 'Bookmark was successfully updated.' }
         format.json { head :no_content }
       else
@@ -94,8 +79,6 @@ class BookmarksController < ApplicationController
     end
   end
 
-  # DELETE /bookmarks/1
-  # DELETE /bookmarks/1.json
   def destroy
     @bookmark = Bookmark.find(params[:id])
     @bookmark.destroy
@@ -104,5 +87,10 @@ class BookmarksController < ApplicationController
       format.html { redirect_to bookmarks_url }
       format.json { head :no_content }
     end
+  end
+  private
+
+  def bookmark_params
+    params.require(:bookmark).permit(:tag_tokens, :full_url)
   end
 end

@@ -47,8 +47,6 @@ module Bookmarkme
     # like if you have constraints or database-specific column types
     # config.active_record.schema_format = :sql
 
-    config.active_record.whitelist_attributes = false
-
     # Enable the asset pipeline
     config.assets.enabled = true
 

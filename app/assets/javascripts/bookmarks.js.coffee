@@ -8,4 +8,4 @@ $ ->
 		startText: "Tag here..."
 		emptyText: "No Results. Hit tab or comma to add this tag"
 		preFill: $('#bookmark_tag_tokens').data("load")
-		asHtmlID: "tag_tokens"
+		asHtmlID: "bookmark_tag_tokens"
