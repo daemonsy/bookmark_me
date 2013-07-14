@@ -1,5 +1,5 @@
-jQuery -> 
-	$('#bookmark_tag_tokens').autoSuggest "/tags/search.json"
+$ ->
+  $('#bookmark_tag_tokens').autoSuggest "/tags/search.json"
 		selectedValuesProp: "name"
 		searchObjProps: "name"
 		selectedItemProp: "name"

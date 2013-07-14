@@ -47,22 +47,18 @@ module Bookmarkme
     # like if you have constraints or database-specific column types
     # config.active_record.schema_format = :sql
 
-    # Enforce whitelist mode for mass assignment.
-    # This will create an empty whitelist of attributes available for mass-assignment for all models
-    # in your app. As such, your models will need to explicitly whitelist or blacklist accessible
-    # parameters by using an attr_accessible or attr_protected declaration.
-    config.active_record.whitelist_attributes = true
+    config.active_record.whitelist_attributes = false
 
     # Enable the asset pipeline
     config.assets.enabled = true
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
-    
+
     config.after_initialize do
       Bitly.use_api_version_3
       ::BITLY_SVC = Bitly.new("o_6ijourg7rs", "R_4cfcc62e1d6df9a7a37fc74797458c92")
     end
-    
+
   end
 end
